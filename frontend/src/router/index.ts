@@ -10,6 +10,7 @@ const Pest = () => import('@/views/pest/index.vue')
 const Irrigation = () => import('@/views/irrigation/index.vue')
 const Fertilize = () => import('@/views/fertilize/index.vue')
 const Prune = () => import('@/views/prune/index.vue')
+const PruneDetail = () => import('@/views/prune/detail.vue')
 const Patrol = () => import('@/views/patrol/index.vue')
 const Weed = () => import('@/views/weed/index.vue')
 const Support = () => import('@/views/support/index.vue')
@@ -24,6 +25,10 @@ const Seasonplan = () => import('@/views/seasonplan/index.vue')
 
 const router = createRouter({
   history: createWebHistory(),
+  // 详情返回列表要停在原处：浏览器回退时恢复滚动位置，其余情况回到顶部
+  scrollBehavior(_to, _from, savedPosition) {
+    return savedPosition ?? { top: 0 }
+  },
   routes: [
     { path: '/', name: 'dashboard', component: Dashboard },
     { path: '/plot', name: 'plot', component: Plot },
@@ -35,6 +40,7 @@ const router = createRouter({
     { path: '/irrigation', name: 'irrigation', component: Irrigation },
     { path: '/fertilize', name: 'fertilize', component: Fertilize },
     { path: '/prune', name: 'prune', component: Prune },
+    { path: '/prune/:id', name: 'prune-detail', component: PruneDetail },
     { path: '/patrol', name: 'patrol', component: Patrol },
     { path: '/weed', name: 'weed', component: Weed },
     { path: '/support', name: 'support', component: Support },
