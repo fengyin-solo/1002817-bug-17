@@ -4,9 +4,18 @@
 """
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Callable
 
 from app.seed import SEED_ROWS
+
+# 模块自定义看板口径：返回 (待处理, 异常)。未注册的模块沿用 pending/abnormal 标记。
+OverviewFn = Callable[[list[dict[str, Any]]], tuple[int, int]]
+_OVERVIEW_FNS: dict[str, OverviewFn] = {}
+
+
+def register_overview(module: str, fn: OverviewFn) -> None:
+    """注册模块的看板重算函数，供对应服务在导入时挂上来。"""
+    _OVERVIEW_FNS[module] = fn
 
 
 class Store:
@@ -31,11 +40,17 @@ class Store:
         modules: list[dict[str, object]] = []
         for name in self.module_names():
             rows = self.rows(name)
+            fn = _OVERVIEW_FNS.get(name)
+            if fn is not None:
+                pending, abnormal = fn(rows)
+            else:
+                pending = sum(1 for row in rows if row.get("pending"))
+                abnormal = sum(1 for row in rows if row.get("abnormal"))
             modules.append({
                 "name": name,
                 "created": len(rows),
-                "pending": sum(1 for row in rows if row.get("pending")),
-                "abnormal": sum(1 for row in rows if row.get("abnormal")),
+                "pending": pending,
+                "abnormal": abnormal,
             })
         cards = [
             {"label": "业务模块", "value": len(modules)},

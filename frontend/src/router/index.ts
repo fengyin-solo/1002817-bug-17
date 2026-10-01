@@ -10,6 +10,7 @@ const Pest = () => import('@/views/pest/index.vue')
 const Irrigation = () => import('@/views/irrigation/index.vue')
 const Fertilize = () => import('@/views/fertilize/index.vue')
 const Prune = () => import('@/views/prune/index.vue')
+const PruneDetail = () => import('@/views/prune/detail.vue')
 const Patrol = () => import('@/views/patrol/index.vue')
 const Weed = () => import('@/views/weed/index.vue')
 const Support = () => import('@/views/support/index.vue')
@@ -35,6 +36,7 @@ const router = createRouter({
     { path: '/irrigation', name: 'irrigation', component: Irrigation },
     { path: '/fertilize', name: 'fertilize', component: Fertilize },
     { path: '/prune', name: 'prune', component: Prune },
+    { path: '/prune/:id', name: 'prune-detail', component: PruneDetail },
     { path: '/patrol', name: 'patrol', component: Patrol },
     { path: '/weed', name: 'weed', component: Weed },
     { path: '/support', name: 'support', component: Support },
